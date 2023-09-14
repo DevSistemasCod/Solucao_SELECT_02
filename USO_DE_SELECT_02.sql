@@ -13,7 +13,7 @@ SELECT AVG(salario) AS media_salarial FROM funcionario;
 -- 4) Calcular a média salarial dos funcionários com duas casas decimais de precisão após a vírgula, você pode usar a função ROUND
 SELECT ROUND(AVG(salario), 2) AS media_salarial FROM funcionario;
 
--- 5) Encontre funcionários cujo nome contém "Silva".
+-- 5) Encontre funcionários cujo nome contém "Gomes".
 SELECT nome_funcionario FROM funcionario
 WHERE nome_funcionario LIKE '%Gomes%';
 
