@@ -7,7 +7,7 @@ WHERE qtd_funcionarios_depto > 15;
 SELECT nome_funcionario FROM funcionario WHERE salario >= 4000.00;
 
 -- 3) Calcular a média salarial dos funcionários
-SELECT AVG(salario) AS media_salarial FROM funcionario;
+SELECT AVG(DISTINCT salario) AS media_salarial FROM funcionario;
 
 -- 4) Calcular a média salarial dos funcionários com duas casas decimais de precisão após a vírgula, você pode usar a função ROUND
 SELECT ROUND(AVG(salario), 2) AS media_salarial FROM funcionario;
@@ -24,7 +24,7 @@ SELECT nome_funcionario, salario FROM funcionario
 WHERE salario = (SELECT MAX(salario) FROM funcionario);
 
 -- 8) Identifique os 2 salários mais altos.
-SELECT nome_funcionario, salario
+SELECT DISTINCT nome_funcionario, salario
 FROM funcionario ORDER BY salario DESC LIMIT 3;
 
 -- 9) Identifique o funcionário mais velho de cada cargo.
