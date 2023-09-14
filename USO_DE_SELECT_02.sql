@@ -1,6 +1,5 @@
 
-
--- 1) Identifique departamentos com mais de 15 funcionários.
+-- 1) Identifique o departamentos com mais de 15 funcionários.
 SELECT sigla_depto FROM departamento
 WHERE qtd_funcionarios_depto > 15;
 
@@ -31,7 +30,6 @@ FROM funcionario ORDER BY salario DESC LIMIT 3;
 -- 9) Identifique o funcionário mais velho de cada cargo.
 SELECT nome_funcionario, cargo,  MAX(data_admissao) AS data_admissao 
 FROM funcionario GROUP BY cargo, nome_funcionario;
-
 
 -- 10) Encontre departamentos com pelo menos um funcionário com salário superior a R$ 5.000.
 SELECT DISTINCT d.nome_depto
