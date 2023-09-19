@@ -23,7 +23,13 @@ SELECT nome_funcionario, salario FROM funcionario WHERE salario = (SELECT MAX(sa
 SELECT nome_funcionario, salario FROM funcionario ORDER BY salario DESC LIMIT 3;
 
 -- 9) Identifique o funcionário mais velho de cada cargo.
-SELECT nome_funcionario, cargo,  MAX(data_admissao) AS data_admissao FROM funcionario GROUP BY cargo, nome_funcionario;
+SELECT f.nome_funcionario, f.cargo, f.data_admissao
+FROM funcionario f
+WHERE (f.sigla_depto, f.data_admissao) IN (
+    SELECT f1.sigla_depto, MIN(f1.data_admissao)
+    FROM funcionario f1
+    GROUP BY f1.sigla_depto
+);
 
 -- 10) Encontre departamentos com pelo menos um funcionário com salário superior a R$ 5.000.
 -- v1
