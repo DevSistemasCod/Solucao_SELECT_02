@@ -35,20 +35,20 @@ WHERE (f.sigla_depto, f.data_admissao) IN (
 -- v1
 SELECT nome_depto FROM departamento 
 WHERE EXISTS ( 
-    SELECT 1 FROM funcionario WHERE ((funcionario.sigla_depto = departamento.sigla_depto) AND (funcionario.salario > 5000.00 ))
+    SELECT * FROM funcionario WHERE ((funcionario.sigla_depto = departamento.sigla_depto) AND (funcionario.salario > 5000.00 ))
 );
 
 -- v2
 SELECT d.nome_depto FROM departamento d
 WHERE EXISTS ( 
-    SELECT 1 FROM funcionario f WHERE (f.sigla_depto = d.sigla_depto) AND (f.salario > 5000.00) 
+    SELECT * FROM funcionario f WHERE (f.sigla_depto = d.sigla_depto) AND (f.salario > 5000.00) 
 );
 
 -- 11) Encontre os departamentos onde pelo menos um funcionário tem um salário superior ao salário médio de todos os funcionários.
 -- v1
 SELECT nome_depto FROM departamento
 WHERE EXISTS (
-    SELECT 1 FROM funcionario WHERE (  
+    SELECT * FROM funcionario WHERE (  
      (funcionario.sigla_depto = departamento.sigla_depto) AND salario > (SELECT AVG(salario) FROM funcionario)
     )
 );
@@ -56,7 +56,7 @@ WHERE EXISTS (
 -- v2
 SELECT d.nome_depto FROM departamento d
 WHERE EXISTS (
-    SELECT 1 FROM funcionario f WHERE (
+    SELECT * FROM funcionario f WHERE (
      (f.sigla_depto = d.sigla_depto) AND f.salario > (SELECT AVG(salario) FROM funcionario)
     )
 );
@@ -64,13 +64,13 @@ WHERE EXISTS (
 -- 12) Encontre departamentos com pelo menos um funcionário cujo nome contenha "Costa".
 SELECT DISTINCT d.nome_depto FROM departamento d
 WHERE EXISTS (
-    SELECT 1 FROM funcionario f WHERE (f.sigla_depto = d.sigla_depto)
+    SELECT * FROM funcionario f WHERE (f.sigla_depto = d.sigla_depto)
     AND f.nome_funcionario LIKE '%Costa%'
 );
 
 -- 13) Encontre departamentos onde pelo menos um funcionário tem um salário superior ao salário médio de seu próprio departamento.
 SELECT DISTINCT d.nome_depto FROM departamento d
 WHERE EXISTS (
-    SELECT 1 FROM funcionario f WHERE (f.sigla_depto = d.sigla_depto)
+    SELECT * FROM funcionario f WHERE (f.sigla_depto = d.sigla_depto)
     AND f.salario > (SELECT AVG(salario) FROM funcionario WHERE (sigla_depto = d.sigla_depto))
 );
