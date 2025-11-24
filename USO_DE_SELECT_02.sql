@@ -1,6 +1,6 @@
--- 1) Identifique o departamentos com mais de 15 funcionários.
+-- 1) Identifique o departamentos com mais de 2 funcionários.
 SELECT sigla_depto FROM departamento 
-WHERE qtd_funcionarios_depto > 15;
+WHERE qtd_funcionarios_depto > 2;
 
 -- 2) Selecione os nomes dos funcionários cujo salário é maior ou igual a R$ 4.000.
 SELECT nome_funcionario FROM funcionario 
@@ -23,35 +23,72 @@ AS salario_anual FROM funcionario;
 
 -- 7) Identifique o funcionário com o salário mais alto.
 SELECT nome_funcionario, salario 
-FROM funcionario WHERE salario = (SELECT MAX(salario) FROM funcionario);
+FROM funcionario WHERE salario 
+= (SELECT MAX(salario) FROM funcionario);
 
 -- 8) Identifique os 2 salários mais altos.
 SELECT nome_funcionario, salario 
 FROM funcionario ORDER BY salario DESC LIMIT 2;
 
 -- 9) Identifique o funcionário mais velho de cada cargo.
-SELECT nome_funcionario, cargo, data_admissao
-FROM funcionario 
+SELECT cargo, nome_funcionario, data_admissao
+FROM funcionario f
 WHERE (cargo, data_admissao) IN (
-	SELECT cargo, MIN(data_admissao) FROM funcionario 
-    GROUP BY cargo
+    SELECT cargo, MIN(data_admissao)
+    FROM funcionario
+    GROUP BY cargo
 )
 ORDER BY data_admissao;
 
+
+SELECT f.nome_funcionario, f.cargo, f.data_admissao
+FROM funcionario f
+WHERE (f.sigla_depto, f.data_admissao) IN (
+    SELECT f1.sigla_depto, MIN(f1.data_admissao)
+    FROM funcionario f1
+    GROUP BY f1.sigla_depto
+);
+
+SELECT nome_funcionario, cargo, data_admissao
+FROM funcionario
+WHERE data_admissao = (
+    SELECT MIN(data_admissao)
+    FROM funcionario
+    WHERE sigla_depto = funcionario.sigla_depto
+);
+
 -- 10) Encontre departamentos com pelo menos um funcionário com salário superior a R$ 5.000.
+-- v1
 SELECT nome_depto FROM departamento 
 WHERE EXISTS ( 
     SELECT * FROM funcionario 
-	WHERE ((funcionario.sigla_depto = departamento.sigla_depto) AND (funcionario.salario > 5000.00 ))
+	WHERE ((funcionario.sigla_depto = departamento.sigla_depto) 
+	AND (funcionario.salario > 5000.00 ))
 );
 
+-- v2
+SELECT d.nome_depto FROM departamento d
+WHERE EXISTS ( 
+    SELECT * FROM funcionario f 
+	WHERE (f.sigla_depto = d.sigla_depto) AND (f.salario > 5000.00) 
+);
 
 -- 11) Encontre os departamentos onde pelo menos um funcionário tem um salário superior ao salário médio de todos os funcionários.
 -- v1
 SELECT nome_depto FROM departamento
 WHERE EXISTS (
     SELECT * FROM funcionario WHERE (  
-     (funcionario.sigla_depto = departamento.sigla_depto) AND salario > (SELECT AVG(salario) FROM funcionario)
+     (funcionario.sigla_depto = departamento.sigla_depto) 
+	 AND salario > (SELECT AVG(salario) FROM funcionario)
+    )
+);
+
+-- v2
+SELECT d.nome_depto FROM departamento d
+WHERE EXISTS (
+    SELECT * FROM funcionario f WHERE (
+     (f.sigla_depto = d.sigla_depto) AND f.salario > (SELECT AVG(salario) 
+	 FROM funcionario)
     )
 );
 
